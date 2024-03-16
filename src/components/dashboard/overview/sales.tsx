@@ -12,7 +12,7 @@ import type { SxProps } from '@mui/material/styles';
 import { ArrowClockwise as ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import type { ApexOptions } from 'apexcharts';
-
+import { Map, Layer, Feature } from 'react-mapbox-gl'
 import { Chart } from '@/components/core/chart';
 
 export interface SalesProps {
@@ -23,6 +23,10 @@ export interface SalesProps {
 export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
   const chartOptions = useChartOptions();
 
+  const ReactMap = Map({
+    accessToken: "pk.eyJ1IjoibWljaGFlbHllbyIsImEiOiJjbHR1Y2IzOHkxZGVyMmlwYzR3bHl5MGpjIn0.w65MHF6O3-9fv9xTkqkc6w"
+  })
+
   return (
     <Card sx={sx}>
       <CardHeader
@@ -31,17 +35,30 @@ export function Sales({ chartSeries, sx }: SalesProps): React.JSX.Element {
             Sync
           </Button>
         }
-        title="Sales"
+        title="Map"
       />
+
       <CardContent>
-        <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />
+        {/* <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" /> */}
+        <ReactMap
+          style="mapbox://styles/mapbox/streets-v9"
+          containerStyle={{
+            height: '100vh',
+            width: '100vw'
+          }}
+        >
+          <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
+            <Feature coordinates={[-0.481747846041145, 51.3233379650232]} />
+          </Layer>
+        </ReactMap>;
       </CardContent>
+
       <Divider />
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
+      {/* <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button color="inherit" endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />} size="small">
           Overview
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 }
